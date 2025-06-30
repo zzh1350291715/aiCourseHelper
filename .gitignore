@@ -1,0 +1,70 @@
+# 依赖文件
+node_modules/
+target/
+
+# 前端构建文件
+dist/
+build/
+
+# IDE文件
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+logs/
+
+# 临时文件
+*.tmp
+*.temp
+
+# 环境配置文件
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 上传文件
+uploads/
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# Gradle
+.gradle/
+gradle/
+gradlew
+gradlew.bat
+
+# Java编译文件
+*.class
+*.jar
+*.war
+*.ear
+
+# Node.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 包管理器锁定文件（可选择性忽略）
+# package-lock.json
+# yarn.lock
+
+# 测试覆盖率报告
+coverage/
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
