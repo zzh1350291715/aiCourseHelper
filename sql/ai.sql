@@ -182,7 +182,6 @@ CREATE TABLE `knowledge_bases`  (
 -- ----------------------------
 -- Records of knowledge_bases
 -- ----------------------------
-INSERT INTO `knowledge_bases` VALUES (1, 1, 'Java基础知识库', NOW(), NOW(), 'Java基础相关知识点题库');
 
 -- ----------------------------
 -- Table structure for ppt_outlines
@@ -219,45 +218,19 @@ CREATE TABLE `ppt_outlines`  (
 DROP TABLE IF EXISTS `questions`;
 CREATE TABLE `questions`  (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `quiz_id` bigint NULL DEFAULT NULL,
+  `quiz_id` bigint NOT NULL,
   `question_text` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `question_type` enum('MULTIPLE_CHOICE','TRUE_FALSE','SHORT_ANSWER') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `options` json NULL,
   `correct_answer` tinytext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
-  `knowledge_base_id` bigint NULL DEFAULT NULL,
-  `difficulty` enum('EASY','MEDIUM','HARD') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'MEDIUM',
-  `tags` json NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `fk_questions_quiz`(`quiz_id` ASC) USING BTREE,
-  INDEX `fk_questions_knowledge_base`(`knowledge_base_id` ASC) USING BTREE,
-  CONSTRAINT `fk_questions_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `fk_questions_knowledge_base` FOREIGN KEY (`knowledge_base_id`) REFERENCES `knowledge_bases` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT `fk_questions_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of questions
 -- ----------------------------
-INSERT INTO `questions` (`id`, `quiz_id`, `question_text`, `question_type`, `options`, `correct_answer`, `knowledge_base_id`, `difficulty`, `tags`) VALUES
-(1, NULL, 'Java中声明整型变量的关键字是？', 'MULTIPLE_CHOICE', '{"A":"int","B":"float","C":"String","D":"char"}', 'A', 1, 'EASY', '["Java","基础"]'),
-(2, NULL, '下列哪个是Java的基本数据类型？', 'MULTIPLE_CHOICE', '{"A":"int","B":"Integer","C":"String","D":"List"}', 'A', 1, 'EASY', '["Java","基础"]'),
-(3, NULL, 'Java中用于输出信息到控制台的方法是？', 'MULTIPLE_CHOICE', '{"A":"System.out.println()","B":"console.log()","C":"print()","D":"echo()"}', 'A', 1, 'EASY', '["Java","基础"]'),
-(4, NULL, 'Java中用于继承的关键字是？', 'MULTIPLE_CHOICE', '{"A":"extends","B":"implements","C":"inherit","D":"super"}', 'A', 1, 'EASY', '["Java","基础"]'),
-(5, NULL, 'Java中数组的下标起始值是？', 'MULTIPLE_CHOICE', '{"A":"0","B":"1","C":"-1","D":"随意"}', 'A', 1, 'EASY', '["Java","基础"]'),
-(6, NULL, 'Java中String属于基本数据类型。', 'TRUE_FALSE', NULL, 'false', 1, 'EASY', '["Java","基础"]'),
-(7, NULL, 'Java中类名建议以大写字母开头。', 'TRUE_FALSE', NULL, 'true', 1, 'EASY', '["Java","基础"]'),
-(8, NULL, 'Java中main方法的正确写法是？', 'MULTIPLE_CHOICE', '{"A":"public static void main(String[] args)","B":"void main(String[] args)","C":"static void main(String args[])","D":"public void main()"}', 'A', 1, 'MEDIUM', '["Java","基础"]'),
-(9, NULL, 'Java中用于实现多态的机制是？', 'MULTIPLE_CHOICE', '{"A":"继承","B":"重载和重写","C":"接口","D":"以上都是"}', 'D', 1, 'MEDIUM', '["Java","基础"]'),
-(10, NULL, 'Java中final修饰的变量可以被修改。', 'TRUE_FALSE', NULL, 'false', 1, 'MEDIUM', '["Java","基础"]'),
-(11, NULL, 'Java中==和equals的区别是什么？', 'SHORT_ANSWER', NULL, '==比较引用，equals比较内容', 1, 'MEDIUM', '["Java","基础"]'),
-(12, NULL, 'Java中ArrayList和LinkedList的区别？', 'SHORT_ANSWER', NULL, 'ArrayList底层是数组，LinkedList底层是链表', 1, 'MEDIUM', '["Java","基础"]'),
-(13, NULL, 'Java中如何定义一个常量？', 'MULTIPLE_CHOICE', '{"A":"final int a = 10;","B":"const int a = 10;","C":"static int a = 10;","D":"int a = 10;"}', 'A', 1, 'EASY', '["Java","基础"]'),
-(14, NULL, 'Java中包的关键字是？', 'MULTIPLE_CHOICE', '{"A":"package","B":"import","C":"namespace","D":"module"}', 'A', 1, 'EASY', '["Java","基础"]'),
-(15, NULL, 'Java中switch语句可以作用于哪些类型？', 'MULTIPLE_CHOICE', '{"A":"int,char,String,enum","B":"float,double","C":"boolean","D":"List"}', 'A', 1, 'MEDIUM', '["Java","基础"]'),
-(16, NULL, 'Java中构造方法的名称必须与类名相同。', 'TRUE_FALSE', NULL, 'true', 1, 'EASY', '["Java","基础"]'),
-(17, NULL, 'Java中接口使用哪个关键字声明？', 'MULTIPLE_CHOICE', '{"A":"interface","B":"implements","C":"abstract","D":"extends"}', 'A', 1, 'EASY', '["Java","基础"]'),
-(18, NULL, 'Java中可以多继承类。', 'TRUE_FALSE', NULL, 'false', 1, 'EASY', '["Java","基础"]'),
-(19, NULL, 'Java中方法重载是指方法名相同但参数不同。', 'TRUE_FALSE', NULL, 'true', 1, 'EASY', '["Java","基础"]'),
-(20, NULL, '简述Java中异常处理的关键字。', 'SHORT_ANSWER', NULL, 'try, catch, finally, throw, throws', 1, 'MEDIUM', '["Java","基础"]');
 
 -- ----------------------------
 -- Table structure for quizzes
@@ -290,7 +263,6 @@ CREATE TABLE `student_answers`  (
   `is_correct` tinyint(1) NULL DEFAULT NULL,
   `score` decimal(38, 2) NULL DEFAULT NULL,
   `submitted_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `file_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `fk_answers_quiz`(`quiz_id` ASC) USING BTREE,
   INDEX `fk_answers_student`(`student_id` ASC) USING BTREE,
@@ -326,28 +298,6 @@ CREATE TABLE `student_progress`  (
 
 -- ----------------------------
 -- Records of student_progress
--- ----------------------------
-
--- ----------------------------
--- Table structure for student_quiz_report
--- ----------------------------
-DROP TABLE IF EXISTS `student_quiz_report`;
-CREATE TABLE `student_quiz_report`  (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `student_id` bigint NOT NULL,
-  `quiz_id` bigint NOT NULL,
-  `status` enum('NOT_STARTED','SUBMITTED','COMPLETED') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'NOT_STARTED',
-  `submitted_at` datetime(6) NULL DEFAULT NULL,
-  `score` decimal(5, 2) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `UK_student_quiz`(`student_id` ASC, `quiz_id` ASC) USING BTREE,
-  INDEX `fk_report_quiz`(`quiz_id` ASC) USING BTREE,
-  CONSTRAINT `fk_report_student` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `fk_report_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of student_quiz_report
 -- ----------------------------
 
 -- ----------------------------

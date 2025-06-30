@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -15,6 +14,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('@/views/Login.vue')
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('@/views/admin/AdminDashboard.vue')
   },
   {
     path: '/register',
@@ -82,17 +86,6 @@ const routes = [
     name: 'AIGeneration',
     component: () => import('@/views/instructor/AIGeneration.vue')
   },
-  // 考试系统路由 - 讲师
-  {
-    path: '/instructor/question-bank',
-    name: 'QuestionBank',
-    component: () => import('@/views/instructor/QuestionBank.vue')
-  },
-  {
-    path: '/instructor/quiz-list',
-    name: 'QuizList',
-    component: () => import('@/views/instructor/QuizList.vue')
-  },
   // 学生专用路由
   {
     path: '/student/progress',
@@ -104,27 +97,11 @@ const routes = [
     name: 'EnrolledCourses',
     component: () => import('@/views/student/EnrolledCourses.vue')
   },
-  // 考试系统路由 - 学生
-  {
-    path: '/student/quiz-list',
-    name: 'StudentQuizList',
-    component: () => import('@/views/student/QuizList.vue')
-  },
   // 测验路由
   {
     path: '/materials/:materialId/quiz',
     name: 'Quiz',
-    component: () => import('@/views/student/Quiz.vue')
-  },
-  {
-    path: '/quiz/:quizId',
-    name: 'Quiz',
-    component: () => import('@/views/student/Quiz.vue')
-  },
-  {
-    path: '/quiz/:quizId/result',
-    name: 'QuizResult',
-    component: () => import('@/views/student/QuizResult.vue')
+    component: () => import('@/views/Quiz.vue')
   },
   // 个人中心
   {
@@ -142,27 +119,6 @@ const routes = [
 const router = new VueRouter({
   mode: 'history', // 加上这一行
   routes
-})
-
-// 全局路由守卫，防止重复跳转
-router.beforeEach((to, from, next) => {
-  // 需要登录的页面
-  const requiresAuth = !['/', '/login', '/register'].includes(to.path)
-  const isLoggedIn = store.getters.isLoggedIn
-
-  if (requiresAuth && !isLoggedIn) {
-    // 未登录访问受限页，跳转到登录
-    if (to.path !== '/login') {
-      next('/login')
-    } else {
-      next()
-    }
-  } else if (to.path === '/login' && isLoggedIn) {
-    // 已登录访问登录页，跳转到dashboard
-    next('/dashboard')
-  } else {
-    next()
-  }
 })
 
 export default router

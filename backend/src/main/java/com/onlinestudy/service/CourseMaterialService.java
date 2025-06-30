@@ -93,6 +93,7 @@ class CourseMaterialServiceImpl implements CourseMaterialService {
             
             material.setContentUrl("/uploads/course-materials/" + courseId + "/" + uniqueFilename);
             material.setOrder(order);
+            material.setFileSize(file.getSize());
 
             return materialRepository.save(material);
         } catch (IOException e) {
@@ -145,4 +146,4 @@ class CourseMaterialServiceImpl implements CourseMaterialService {
         // 删除数据库记录
         materialRepository.deleteById(materialId);
     }
-} 
+}

@@ -2,15 +2,27 @@ package com.onlinestudy.service;
 
 import com.onlinestudy.domain.KnowledgeBase;
 import com.onlinestudy.domain.KnowledgeBaseDocument;
-
+import com.onlinestudy.domain.CourseOutline;
+import com.onlinestudy.domain.PPTOutline;
+import com.onlinestudy.domain.Quiz;
+import com.onlinestudy.domain.Question;
+import com.onlinestudy.domain.AutoGradingResult;
 import com.onlinestudy.repository.KnowledgeBaseRepository;
 import com.onlinestudy.repository.KnowledgeBaseDocumentRepository;
 import com.onlinestudy.repository.CourseRepository;
-
+import com.onlinestudy.repository.CourseOutlineRepository;
+import com.onlinestudy.repository.PPTOutlineRepository;
+import com.onlinestudy.repository.QuizRepository;
+import com.onlinestudy.repository.QuestionRepository;
+import com.onlinestudy.repository.AutoGradingResultRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,7 +44,6 @@ public interface KnowledgeBaseService {
     Map<String, Object> generateQuiz(Long knowledgeBaseId);
     Map<String, Object> answerQuestion(Long knowledgeBaseId, String question);
     Map<String, Object> autoGrade(Map<String, Object> request);
-    List<KnowledgeBase> getKnowledgeBasesByCourseId(Long courseId);
 }
 
 @Service
@@ -207,10 +218,5 @@ class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         result.put("feedback", "整体表现良好，需要在细节方面加强。");
         result.put("gradedAt", new Date());
         return result;
-    }
-
-    @Override
-    public List<KnowledgeBase> getKnowledgeBasesByCourseId(Long courseId) {
-        return knowledgeBaseRepository.findAllByCourse_Id(courseId);
     }
 } 

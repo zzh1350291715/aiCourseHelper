@@ -175,20 +175,25 @@
       >
         <el-table-column prop="title" label="资料名称" min-width="200">
           <template slot-scope="scope">
-            <i :class="getMaterialIcon(scope.row.type)"></i>
+            <i :class="getMaterialIcon(scope.row.materialType)"></i>
             {{ scope.row.title }}
           </template>
         </el-table-column>
-        <el-table-column prop="type" label="类型" width="100">
+        <el-table-column prop="materialType" label="类型" width="100">
           <template slot-scope="scope">
-            <el-tag size="mini" :type="getMaterialTagType(scope.row.type)">
-              {{ getMaterialTypeName(scope.row.type) }}
+            <el-tag size="mini" :type="getMaterialTagType(scope.row.materialType)">
+              {{ getMaterialTypeName(scope.row.materialType) }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="uploadTime" label="上传时间" width="150">
+        <el-table-column prop="fileSize" label="文件大小" width="120">
           <template slot-scope="scope">
-            {{ formatDate(scope.row.uploadTime) }}
+            {{ formatFileSize(scope.row.fileSize) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="createdAt" label="上传时间" width="150">
+          <template slot-scope="scope">
+            {{ formatDate(scope.row.createdAt) }}
           </template>
         </el-table-column>
       </el-table>
@@ -368,16 +373,35 @@ export default {
 
     formatDate(date) {
       if (!date) return '未知'
-      return new Date(date).toLocaleDateString('zh-CN')
+      try {
+        return new Date(date).toLocaleDateString('zh-CN')
+      } catch (error) {
+        console.error('日期格式化错误:', error)
+        return '未知'
+      }
+    },
+
+    formatFileSize(size) {
+      if (!size || size === 0) return '未知'
+      const units = ['B', 'KB', 'MB', 'GB']
+      let index = 0
+      let fileSize = size
+      
+      while (fileSize >= 1024 && index < units.length - 1) {
+        fileSize /= 1024
+        index++
+      }
+      
+      return `${fileSize.toFixed(1)} ${units[index]}`
     },
 
     getMaterialIcon(type) {
       const icons = {
         'PDF': 'el-icon-document',
-        'WORD': 'el-icon-edit-outline',
-        'POWERPOINT': 'el-icon-present',
+        'DOCUMENT': 'el-icon-edit-outline',
         'VIDEO': 'el-icon-video-play',
         'AUDIO': 'el-icon-microphone',
+        'IMAGE': 'el-icon-picture',
         'OTHER': 'el-icon-paperclip'
       }
       return icons[type] || 'el-icon-document'
@@ -386,10 +410,10 @@ export default {
     getMaterialTagType(type) {
       const types = {
         'PDF': 'danger',
-        'WORD': 'primary',
-        'POWERPOINT': 'warning',
+        'DOCUMENT': 'primary',
         'VIDEO': 'success',
         'AUDIO': 'info',
+        'IMAGE': 'warning',
         'OTHER': ''
       }
       return types[type] || ''
@@ -398,10 +422,10 @@ export default {
     getMaterialTypeName(type) {
       const names = {
         'PDF': 'PDF',
-        'WORD': 'Word',
-        'POWERPOINT': 'PPT',
+        'DOCUMENT': '文档',
         'VIDEO': '视频',
         'AUDIO': '音频',
+        'IMAGE': '图片',
         'OTHER': '其他'
       }
       return names[type] || '未知'
@@ -590,4 +614,4 @@ export default {
     margin-top: 15px;
   }
 }
-</style> 
+</style>

@@ -67,7 +67,6 @@ export default {
           role: this.userType
         })
 
-        // 登录成功后，判断角色跳转页面
         const role = user.role
         if (role === 'TEACHER') {
           this.$router.push('/dashboard')

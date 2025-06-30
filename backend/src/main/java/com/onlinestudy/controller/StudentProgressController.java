@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/student-progress")
+@CrossOrigin(origins = "http://localhost:8080", allowCredentials = "true")
 public class StudentProgressController {
 
     private final StudentProgressService progressService;

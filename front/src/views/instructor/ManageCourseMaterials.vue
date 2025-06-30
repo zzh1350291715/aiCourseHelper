@@ -15,10 +15,10 @@
       <!-- 材料列表 -->
       <el-table :data="materials" style="width: 100%">
         <el-table-column prop="title" label="材料标题" />
-        <el-table-column prop="type" label="类型">
+        <el-table-column prop="materialType" label="类型">
           <template slot-scope="scope">
-            <el-tag :type="getTypeColor(scope.row.type)">
-              {{ getTypeText(scope.row.type) }}
+            <el-tag :type="getTypeColor(scope.row.materialType)">
+              {{ getTypeText(scope.row.materialType) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -27,9 +27,9 @@
             {{ formatFileSize(scope.row.fileSize) }}
           </template>
         </el-table-column>
-        <el-table-column prop="uploadTime" label="上传时间">
+        <el-table-column prop="createdAt" label="上传时间">
           <template slot-scope="scope">
-            {{ formatDate(scope.row.uploadTime) }}
+            {{ formatDate(scope.row.createdAt) }}
           </template>
         </el-table-column>
         <el-table-column label="操作" width="200">
@@ -52,8 +52,10 @@
           <el-select v-model="uploadForm.type" placeholder="请选择材料类型">
             <el-option label="视频" value="VIDEO" />
             <el-option label="文档" value="DOCUMENT" />
+            <el-option label="PDF" value="PDF" />
             <el-option label="音频" value="AUDIO" />
             <el-option label="图片" value="IMAGE" />
+            <el-option label="测验" value="QUIZ" />
             <el-option label="其他" value="OTHER" />
           </el-select>
         </el-form-item>
@@ -149,8 +151,10 @@ export default {
       const colors = {
         VIDEO: 'primary',
         DOCUMENT: 'success',
+        PDF: 'danger',
         AUDIO: 'warning',
         IMAGE: 'info',
+        QUIZ: 'primary',
         OTHER: ''
       }
       return colors[type] || ''
@@ -160,8 +164,10 @@ export default {
       const texts = {
         VIDEO: '视频',
         DOCUMENT: '文档',
+        PDF: 'PDF',
         AUDIO: '音频',
         IMAGE: '图片',
+        QUIZ: '测验',
         OTHER: '其他'
       }
       return texts[type] || '未知'
@@ -227,6 +233,42 @@ export default {
         return false
       }
       
+      // 验证文件类型
+      if (!this.validateFileType(file, this.uploadForm.type)) {
+        return false
+      }
+      
+      return true
+    },
+    
+    validateFileType(file, materialType) {
+      const fileName = file.name.toLowerCase()
+      const fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1)
+      
+      const allowedExtensions = {
+        VIDEO: ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm', 'mkv'],
+        DOCUMENT: ['doc', 'docx', 'txt', 'rtf', 'ppt', 'pptx'],
+        PDF: ['pdf'],
+        AUDIO: ['mp3', 'wav', 'aac', 'flac', 'ogg'],
+        IMAGE: ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'],
+        QUIZ: ['json', 'xml', 'txt'],
+        OTHER: [] // 其他类型允许所有文件
+      }
+      
+      const allowed = allowedExtensions[materialType]
+      
+      // 如果是OTHER类型，允许所有文件
+      if (materialType === 'OTHER') {
+        return true
+      }
+      
+      // 检查文件扩展名是否在允许列表中
+      if (!allowed || !allowed.includes(fileExtension)) {
+        const allowedText = allowed ? allowed.join(', ') : '无'
+        this.$message.error(`文件类型不符合！${this.getTypeText(materialType)}类型只允许上传：${allowedText} 格式的文件`)
+        return false
+      }
+      
       return true
     },
     
@@ -281,4 +323,4 @@ export default {
 .dialog-footer {
   text-align: right;
 }
-</style> 
+</style>

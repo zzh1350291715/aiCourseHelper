@@ -68,16 +68,6 @@
                   查看我的课程
                 </el-button>
               </el-col>
-              <el-col :span="6">
-                <el-button type="warning" icon="el-icon-edit" @click="$router.push('/instructor/question-bank')">
-                  题库管理
-                </el-button>
-              </el-col>
-              <el-col :span="6" style="margin-top: 10px;">
-                <el-button type="danger" icon="el-icon-document" @click="$router.push('/instructor/quiz-list')">
-                  测验管理
-                </el-button>
-              </el-col>
             </el-row>
           </el-card>
         </el-col>
@@ -161,11 +151,6 @@
               <el-col :span="6">
                 <el-button type="info" icon="el-icon-trophy" @click="$router.push('/student/progress')">
                   学习进度
-                </el-button>
-              </el-col>
-              <el-col :span="6">
-                <el-button type="warning" icon="el-icon-tickets" @click="$router.push('/student/quiz-list')">
-                  我的测验
                 </el-button>
               </el-col>
             </el-row>

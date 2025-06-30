@@ -40,6 +40,9 @@ public class CourseMaterial {
     @Column(name = "`order`", nullable = false)
     private int order;
 
+    @Column(name = "file_size")
+    private Long fileSize;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;
@@ -102,6 +105,14 @@ public class CourseMaterial {
         this.order = order;
     }
 
+    public Long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
+    }
+
     public Timestamp getCreatedAt() {
         return createdAt;
     }
@@ -130,4 +141,4 @@ public class CourseMaterial {
     public int hashCode() {
         return Objects.hash(id);
     }
-} 
+}
