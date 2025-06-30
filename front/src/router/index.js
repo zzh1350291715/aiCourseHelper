@@ -97,6 +97,16 @@ const routes = [
     name: 'EnrolledCourses',
     component: () => import('@/views/student/EnrolledCourses.vue')
   },
+  {
+    path: '/student/quiz-list',
+    name: 'StudentQuizList',
+    component: () => import('@/views/student/QuizList.vue')
+  },
+  {
+    path: '/student/quiz-result/:quizId',
+    name: 'QuizResult',
+    component: () => import('@/views/student/QuizResult.vue')
+  },
   // 测验路由
   {
     path: '/materials/:materialId/quiz',
@@ -113,6 +123,17 @@ const routes = [
     path: '/about',
     name: 'about',
     component: () => import('@/views/AboutView.vue')
+  },
+  // 讲师测验和题库管理
+  {
+    path: '/instructor/quiz-list',
+    name: 'InstructorQuizList',
+    component: () => import('@/views/instructor/QuizList.vue')
+  },
+  {
+    path: '/instructor/question-bank',
+    name: 'QuestionBank',
+    component: () => import('@/views/instructor/QuestionBank.vue')
   }
 ]
 

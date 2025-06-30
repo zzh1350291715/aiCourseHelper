@@ -6,7 +6,7 @@ spring:
     # MySQL 数据库连接配置
     url: jdbc:mysql://localhost:3306/ai?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8
     username: root
-    password: 20041127cjw
+    password: jsmbrazmsr1
     driver-class-name: com.mysql.cj.jdbc.Driver
 
     # 连接池配置
