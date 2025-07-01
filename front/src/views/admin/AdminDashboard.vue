@@ -10,7 +10,6 @@
     </div>
     
     <div class="main-content">
-    <button class="loginoutbutton" @click="loginout">退出登录</button>
       <div v-show="activeTab === 'users'">
         <h2>用户管理</h2>
         <table>
@@ -24,11 +23,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in users" :key="user.user_id">
+            <tr v-for="user in users" :key="user.id">
               <td>{{ user.id }}</td>
               <td>{{ user.username }}</td>
               <td >
-                <span v-if="!visiblePasswords[user.user_id]">******</span>
+                <span v-if="!visiblePasswords[user.id]">******</span>
                 <span v-else>{{ user.password }}</span>
               </td>
               <td>{{ user.role }}</td>
@@ -60,7 +59,7 @@
         <label>修改密码:</label>
         <input type="password" placeholder="请输入新密码">
         <div class="selectcontainer">
-        <label >修改身份:</label>
+        <label class="rolelabel">修改身份:</label>
         <select v-model="newRole">
             <option value="student">学生</option>
             <option value="teacher">教师</option>
@@ -94,11 +93,8 @@ export default {
     this.fetchCourses();
   },
   methods: {
-    loginout(){
-      this.$router.push('/')
-    },
-    checkPassword(user_id) {
-        this.$set(this.visiblePasswords, user_id, !this.visiblePasswords[user_id]);
+    checkPassword(id) {
+        this.$set(this.visiblePasswords, id, !this.visiblePasswords[id]);
     },
     fetchUsers() {
     axios.get(`http://localhost:8081/api/user/getalluser`)
@@ -116,7 +112,7 @@ export default {
     },
     deleteUser(userId) {
     axios.post(`http://localhost:8081/api/user/deleteuserbyid`,{
-      user_id:userId,
+      id:userId,
     })
     .then(res=>{
       this.fetchUsers();
@@ -147,7 +143,7 @@ table {
   border:2px solid black;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   table-layout: fixed; /* 固定表格布局 */;
-  width: 200px;
+  width: 250px;
  }
 
 tr:hover {
@@ -160,9 +156,19 @@ padding: 8px;
 text-align: left;
 }
 
-.selectcontainer label, .selectcontainer select {
+.selectcontainer label{
   position: relative;
-  right: 85px;
+  right: -50px;
+  top: 80px;
+}
+.selectcontainer .rolelabel{
+  position: relative;
+  right:-50px;
+  top:7px;
+}
+.selectcontainer select {
+  position: relative;
+  right: 80px;
   top:30px;
 }
 .overlay {
@@ -204,9 +210,13 @@ text-align: left;
   cursor: pointer;
 }
 .editcotainer h2{
+  text-align: center;
   margin-top: 50px;
 }   
+  
 .editcotainer input{
+  display: block;
+  margin: 0 auto;
   margin-top: 20px;
   width: 50%;
   height: 30px;
@@ -214,6 +224,8 @@ text-align: left;
   border: 2px solid #000000;
 }
 .editcotainer select {
+  display: block;
+  margin: 0 auto;
   padding: 6px 10px;
   border-radius: 5px;
   border: 2px solid #000000;
@@ -231,13 +243,7 @@ text-align: left;
   padding: 20px;
   border-radius: 8px;
 }
-.sidebar h2 {
-  position: relative;
-  right:10px;
-}
 .sidebar li {
-  position: relative;
-  right:60px;
   cursor: pointer;
   margin-top: 25px;
   list-style-type: none;
@@ -245,19 +251,20 @@ text-align: left;
 .main-content {
   flex: 1;
   padding: 20px;
+  background-color: white;
 }
 .main-content h2 {
   position: relative;
-  right:8%;
+  right:-45%;
+  margin-bottom: 40px;
 }
 
 .main-content button  {
-
   background-color: white;
   border: 2px solid #000000;
   border-radius: 5px;
   width: 70px;
-  margin:0 7px;
+  margin:5px 8px;
   height: 25px;
 }
 .main-content button:hover {
@@ -267,7 +274,7 @@ text-align: left;
 }
 table {
   position: relative;
-  right:8%;
+  right:0%;
   width:80%;
   margin:auto;
   border-collapse: collapse;
